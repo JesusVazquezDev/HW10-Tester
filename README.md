@@ -5,6 +5,8 @@ Tests for CS540 Spring 2022 HW10: Reinforcement Learning
 
 ## Changes
  - Updated to support Spring 2022 Implementation
+ - Checks EPSILON values for 50,000 , 20,000 , 10,000 and 5,000 episodes
+ - Checks whether implementation was able to make progress before 6 different episodes. If not, implementation is likely inaccurate. 
  
 ### Version 
   IN_DEVELOPMENT
