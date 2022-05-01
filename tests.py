@@ -18,9 +18,14 @@ def evaluate_frozen_lake(Q_table, EPSILON, visualize=False):
     env.reset(seed=1)
     env.action_space.np_random.seed(1)
     
+    rewardTracker = 0
+    found = 0
+    
+    # Out of 100 moves, you should have 60 of those moves result in a reward
     for i in range(100):
         obs = env.reset()
         done = False
+
         while done == False:
             if random.uniform(0,1) < EPSILON:
                 action = env.action_space.sample()
@@ -32,6 +37,21 @@ def evaluate_frozen_lake(Q_table, EPSILON, visualize=False):
             if visualize:
                 env.render()
                 time.sleep(.01)
+                
+                
+        # If total_reward repeats for more than 3 episodes, likely a problem
+        if(rewardTracker != total_reward):
+            print("Found "+ str(rewardTracker) + " exactly "+ str(found) + " time(s)\n")
+            found = 0
+            rewardTracker = total_reward
+            found += 1
+        else:
+            found += 1
+            
+        # Assuming my implementation is correct, this should be accurate for 50, 20, 10, and 5 thousand)
+        if(found > 5):
+            print("[evaluate_frozen_lake] \nTest Failed: No progress was made after 6(or more) episodes.\n")
+
     score = total_reward/100
     return score
 
@@ -63,6 +83,7 @@ def test_Q_learning(visualize = False):
     else:
         print("Returned " + str(iterations) + " iterations, instead of " + str(true_iterations))
         print("EPSILON == " + str(EPSILON) + " instead of 1")
+        print("Average episode-reward over 100 episodes is " + str(score))
         print("")
         return points
         
@@ -105,6 +126,7 @@ def test_Q_learning2(visualize = False):
     else:
         print("Returned " + str(iterations) + " iterations, instead of " + str(true_iterations))
         print("EPSILON == " + str(EPSILON) + " instead of 1")
+        print("Average episode-reward over 100 episodes is " + str(score))
         print("")
         return points
         
@@ -146,6 +168,7 @@ def test_Q_learning3(visualize = False):
     else:
         print("Returned " + str(iterations) + " iterations, instead of " + str(true_iterations))
         print("EPSILON == " + str(EPSILON) + " instead of 1")
+        print("Average episode-reward over 100 episodes is " + str(score))
         print("")
         return points
         
@@ -187,6 +210,7 @@ def test_Q_learning4(visualize = False):
     else:
         print("Returned " + str(iterations) + " iterations, instead of " + str(true_iterations))
         print("EPSILON == " + str(EPSILON) + " instead of 1")
+        print("Average episode-reward over 100 episodes is " + str(score))
         print("")
         return points
         
@@ -211,13 +235,13 @@ if __name__ == "__main__":
         # Testing 20,000 episodes
         total_points += test_Q_learning()
         
-        # Testing 10,000 episodes
-        total_points += test_Q_learning2()
+        # # Testing 10,000 episodes
+        # total_points += test_Q_learning2()
         
-        # Testing 5,000 episodes
-        total_points += test_Q_learning3()
+        # # Testing 5,000 episodes
+        # total_points += test_Q_learning3()
         
-        #Testing 50,000 episodes
-        total_points += test_Q_learning4()
+        # #Testing 50,000 episodes
+        # total_points += test_Q_learning4()
     except Exception as e:
         print(e)
